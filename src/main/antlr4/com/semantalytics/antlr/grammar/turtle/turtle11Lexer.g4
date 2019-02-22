@@ -21,67 +21,67 @@
 
 lexer grammar turtle11Lexer;
 
-statement
-   : directive
-   | triples '.'
+DOT
+   : '.'
    ;
 
-prefixID
-   : '@prefix' PNAME_NS IRIREF '.'
+fragment
+AT
+    : '@'
+    ;
+
+PREFIX
+   : ('P'|'p')('R'|'r')('E'|'e')('F'|'f')('I'|'i')('X'|'x')
+    ;
+
+BASE
+   : ('B'|'b')('A'|'a')('S'|'s')('E'|'e')
    ;
 
-base
-   : '@base' IRIREF '.'
-   ;
+SEMICOLON
+    ; ';'
+    ;
 
-sparqlBase
-   : 'BASE' IRIREF
-   ;
+COMMA
+    : ','
+    ;
 
-sparqlPrefix
-   : 'PREFIX' PNAME_NS IRIREF
-   ;
+A
+    : 'a'
+    ;
 
-predicateObjectList
-   : verb objectList (';' (verb objectList)?)*
-   ;
+OPEN_SQUARE_BRACE
+    : '['
+    ;
 
-objectList
-   : object (',' object)*
-   ;
+CLOSE_SQUARE_BRACE
+    : ']'
+    ;
 
-verb
-   : predicate
-   | 'a'
-   ;
+OPEN_BRACE
+    : '('
+    ;
 
-blankNodePropertyList
-   : '[' predicateObjectList ']'
-   ;
+CLOSE_BRACE
+    : ')'
+    ;
 
-collection
-   : '(' object* ')'
-   ;
+REFERENCE
+    : '^^'
+    ;
 
-rdfLiteral
-   : String ( LANGTAG | '^^' iri )?
-   ;
+TRUE
+    : ('T'|'t')('R'|'r')('U'|'u')('E'|'e')
+    ;
 
-booleanLiteral
-   : 'true'
-   | 'false'
-   ;
+FALSE
+    : ('F'|'f')('A'|'a')('L'|'l')('S'|'s')('E'|'e')
+    ;
 
-BlankNode
-   : BLANK_NODE_LABEL
-   | ANON
-   ;
 
 WS
-   : ([\t\r\n\u000C] | ' ') + -> skip
+   : ( '\t' | '\r' | '\n' | '\u000C' ) | ' ') + -> channel(HIDDEN)
    ;
-
-// LEXER
 
 PN_PREFIX
    : PN_CHARS_BASE ((PN_CHARS | '.')* PN_CHARS)?
@@ -102,7 +102,7 @@ PNAME_LN
    ;
 
 BLANK_NODE_LABEL
-   : '_:' (PN_CHARS_U | [0-9]) ((PN_CHARS | '.')* PN_CHARS)?
+   : '_:' (PN_CHARS_U | ('0'..'9')) ((PN_CHARS | DOT)* PN_CHARS)?
    ;
 
 LANGTAG
@@ -190,29 +190,24 @@ PN_CHARS
    | '\u203F'..'\u2040'
    ;
 
-
 PN_LOCAL
    : (PN_CHARS_U | ':' | ('0'..'9') | PLX) ((PN_CHARS | '.' | ':' | PLX)* (PN_CHARS | ':' | PLX))?
    ;
-
 
 PLX
    : PERCENT
    | PN_LOCAL_ESC
    ;
 
-
 PERCENT
    : '%' HEX HEX
    ;
-
 
 HEX
    : ('0'..'9')
    | ('A'..'F')
    | ('a'..'f')
    ;
-
 
 PN_LOCAL_ESC
    : '\\' ('_' | '~' | '.' | '-' | '!' | '$' | '&' | '\'' | '(' | ')' | '*' | '+' | ',' | ';' | '=' | '/' | '?' | '#' | '@' | '%')
