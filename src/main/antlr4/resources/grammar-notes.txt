@@ -118,6 +118,7 @@ Productions for terminals
 [170s] 	PERCENT 	::= 	'%' HEX HEX
 [171s] 	HEX 	::= 	[0-9] | [A-F] | [a-f]
 [172s] 	PN_LOCAL_ESC 	::= 	'\' ('_' | '~' | '.' | '-' | '!' | '$' | '&' | "'" | '(' | ')' | '*' | '+' | ',' | ';' | '=' | '/' | '?' | '#' | '@' | '%')
+
 7. Parsing
 
 The RDF 1.1 Concepts and Abstract Syntax specification [RDF11-CONCEPTS] defines three types of RDF Term: IRIs, literals and blank nodes. Literals are composed of a lexical form and an optional language tag [BCP47] or datatype IRI. An extra type, prefix, is used during parsing to map string identifiers to namespace IRIs. This section maps a string conforming to the grammar in section 6.5 Grammar to a set of triples by mapping strings matching productions and lexical tokens to RDF terms or their components (e.g. language tags, lexical forms of literals). Grammar productions change the parser state and emit triples.

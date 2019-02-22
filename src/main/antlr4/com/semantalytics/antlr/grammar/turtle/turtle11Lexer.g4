@@ -19,22 +19,11 @@
 */
 /* Derived from http://www.w3.org/TR/turtle/#sec-grammar-grammar */
 
-grammar turtle;
-
-turtleDoc
-   : statement*
-   ;
+lexer grammar turtle11Lexer;
 
 statement
    : directive
    | triples '.'
-   ;
-
-directive
-   : prefixID
-   | base
-   | sparqlPrefix
-   | sparqlBase
    ;
 
 prefixID
@@ -53,11 +42,6 @@ sparqlPrefix
    : 'PREFIX' PNAME_NS IRIREF
    ;
 
-triples
-   : subject predicateObjectList
-   | blankNodePropertyList predicateObjectList?
-   ;
-
 predicateObjectList
    : verb objectList (';' (verb objectList)?)*
    ;
@@ -71,30 +55,6 @@ verb
    | 'a'
    ;
 
-subject
-   : iri
-   | BlankNode
-   | collection
-   ;
-
-predicate
-   : iri
-   ;
-
-object
-   : iri
-   | BlankNode
-   | collection
-   | blankNodePropertyList
-   | literal
-   ;
-
-literal
-   : rdfLiteral
-   | NumericLiteral
-   | BooleanLiteral
-   ;
-
 blankNodePropertyList
    : '[' predicateObjectList ']'
    ;
@@ -103,29 +63,18 @@ collection
    : '(' object* ')'
    ;
 
-NumericLiteral
-   : INTEGER | DECIMAL | DOUBLE
-   ;
-
 rdfLiteral
-   : String (LANGTAG | '^^' iri)?
+   : String ( LANGTAG | '^^' iri )?
    ;
 
-BooleanLiteral
-   : 'true' | 'false'
-   ;
-
-String
-   : STRING_LITERAL_QUOTE | STRING_LITERAL_SINGLE_QUOTE | STRING_LITERAL_LONG_SINGLE_QUOTE | STRING_LITERAL_LONG_QUOTE
-   ;
-
-iri
-   : IRIREF
-   | PrefixedName
+booleanLiteral
+   : 'true'
+   | 'false'
    ;
 
 BlankNode
-   : BLANK_NODE_LABEL | ANON
+   : BLANK_NODE_LABEL
+   | ANON
    ;
 
 WS
@@ -144,91 +93,72 @@ IRIREF
    : '<' (PN_CHARS | '.' | ':' | '/' | '\\' | '#' | '@' | '%' | '&' | UCHAR)* '>'
    ;
 
-
 PNAME_NS
    : PN_PREFIX? ':'
    ;
-
-
-PrefixedName
-   : PNAME_LN | PNAME_NS
-   ;
-
 
 PNAME_LN
    : PNAME_NS PN_LOCAL
    ;
 
-
 BLANK_NODE_LABEL
    : '_:' (PN_CHARS_U | [0-9]) ((PN_CHARS | '.')* PN_CHARS)?
    ;
-
 
 LANGTAG
    : '@' [a-zA-Z] + ('-' [a-zA-Z0-9] +)*
    ;
 
-
 INTEGER
    : [+-]? [0-9] +
    ;
-
 
 DECIMAL
    : [+-]? [0-9]* '.' [0-9] +
    ;
 
-
 DOUBLE
    : [+-]? ([0-9] + '.' [0-9]* EXPONENT | '.' [0-9] + EXPONENT | [0-9] + EXPONENT)
    ;
-
 
 EXPONENT
    : [eE] [+-]? [0-9] +
    ;
 
-
 STRING_LITERAL_LONG_SINGLE_QUOTE
    : '\'\'\'' (('\'' | '\'\'')? ([^'\\] | ECHAR | UCHAR | '"'))* '\'\'\''
    ;
-
 
 STRING_LITERAL_LONG_QUOTE
    : '"""' (('"' | '""')? (~ ["\\] | ECHAR | UCHAR | '\''))* '"""'
    ;
 
-
 STRING_LITERAL_QUOTE
    : '"' (~ ["\\\r\n] | '\'' | '\\"')* '"'
    ;
-
 
 STRING_LITERAL_SINGLE_QUOTE
    : '\'' (~ [\u0027\u005C\u000A\u000D] | ECHAR | UCHAR | '"')* '\''
    ;
 
-
 UCHAR
    : '\\u' HEX HEX HEX HEX | '\\U' HEX HEX HEX HEX HEX HEX HEX HEX
    ;
-
 
 ECHAR
    : '\\' [tbnrf"'\\]
    ;
 
-
 ANON_WS
-   : ' ' | '\t' | '\r' | '\n'
+   : ' '
+   | '\t'
+   | '\r'
+   | '\n'
    ;
-
 
 ANON
    : '[' ANON_WS* ']'
    ;
-
 
 PN_CHARS_BASE
     : 'A' .. 'Z'
@@ -246,24 +176,29 @@ PN_CHARS_BASE
     | '\uFDF0' .. '\uFFFD'
     ;
 
-
 PN_CHARS_U
-   : PN_CHARS_BASE | '_'
+   : PN_CHARS_BASE
+   | '_'
    ;
 
-
 PN_CHARS
-   : PN_CHARS_U | '-' | [0-9] | '\u00B7' | [\u0300-\u036F] | [\u203F-\u2040]
+   : PN_CHARS_U
+   | '-'
+   | ('0'..'9')
+   | '\u00B7'
+   | '\u0300'..'\u036F'
+   | '\u203F'..'\u2040'
    ;
 
 
 PN_LOCAL
-   : (PN_CHARS_U | ':' | [0-9] | PLX) ((PN_CHARS | '.' | ':' | PLX)* (PN_CHARS | ':' | PLX))?
+   : (PN_CHARS_U | ':' | ('0'..'9') | PLX) ((PN_CHARS | '.' | ':' | PLX)* (PN_CHARS | ':' | PLX))?
    ;
 
 
 PLX
-   : PERCENT | PN_LOCAL_ESC
+   : PERCENT
+   | PN_LOCAL_ESC
    ;
 
 
@@ -273,7 +208,9 @@ PERCENT
 
 
 HEX
-   : [0-9] | [A-F] | [a-f]
+   : ('0'..'9')
+   | ('A'..'F')
+   | ('a'..'f')
    ;
 
 
