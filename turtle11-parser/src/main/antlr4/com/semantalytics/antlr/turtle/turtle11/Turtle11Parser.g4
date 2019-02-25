@@ -4,7 +4,7 @@ options { tokenVocab=Turtle11Lexer; }
 
 /* [1] */
 turtleDoc
-   : statement*
+   : statement* EOF
    ;
 
 /* [2] */
@@ -110,7 +110,7 @@ numericLiteral
 
 /* [128s] */
 rdfLiteral
-   : String ( LANGTAG | REFERENCE iri )?
+   : string ( LANGTAG | REFERENCE iri )?
    ;
 
 /* [133s] */

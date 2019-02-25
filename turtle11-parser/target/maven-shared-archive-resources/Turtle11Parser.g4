@@ -1,10 +1,10 @@
-parser grammar turtle11Parser;
+parser grammar Turtle11Parser;
 
-options { tokenVocab=turtle11Lexer; }
+options { tokenVocab=Turtle11Lexer; }
 
 /* [1] */
 turtleDoc
-   : statement*
+   : statement* EOF
    ;
 
 /* [2] */
@@ -110,7 +110,7 @@ numericLiteral
 
 /* [128s] */
 rdfLiteral
-   : String ( LANGTAG | REFERENCE iri )?
+   : string ( LANGTAG | REFERENCE iri )?
    ;
 
 /* [133s] */
