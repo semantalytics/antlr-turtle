@@ -23,12 +23,12 @@ directive
 
 /* [4] */
 prefixID
-   : AT PREFIX PNAME_NS IRIREF DOT
+   : AT_PREFIX PNAME_NS IRIREF DOT
    ;
 
 /* [5] */
 base
-   : AT BASE IRIREF DOT
+   : AT_BASE IRIREF DOT
    ;
 
 /* [5s] */

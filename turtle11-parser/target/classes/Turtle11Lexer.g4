@@ -9,8 +9,16 @@ AT
     : '@'
     ;
 
+AT_PREFIX
+    : AT PREFIX
+    ;
+
 PREFIX
-   : ('P'|'p')('R'|'r')('E'|'e')('F'|'f')('I'|'i')('X'|'x')
+    : ('P'|'p')('R'|'r')('E'|'e')('F'|'f')('I'|'i')('X'|'x')
+    ;
+
+AT_BASE
+    : AT BASE
     ;
 
 BASE
@@ -94,17 +102,17 @@ DECIMAL
 
 /* [21] */
 DOUBLE
-   : [+-]? ([0-9] + DOT [0-9]* EXPONENT | DOT [0-9] + EXPONENT | [0-9]+ EXPONENT)
+   : ('+' | '-')? ( ('0'..'9') + DOT ('0'..'9')* EXPONENT | DOT ('0'..'9')+ EXPONENT | ('0'..'9')+ EXPONENT)
    ;
 
 /* [154s] */
 EXPONENT
-   : [eE] [+-]? [0-9]+
+   : ('e' | 'E') ('+' | '-')? ('0'..'9')+
    ;
 
 /* [22] */
 STRING_LITERAL_QUOTE
-   : '"' (~ ["\\\r\n] | '\'' | '\\"')* '"'
+   : '"' ( ~('"' | '\\' | '\r' | '\n' ) | ECHAR | UCHAR)* '"'
    ;
 
 /* [23] */
@@ -130,7 +138,7 @@ UCHAR
 
 /* [159s] */
 ECHAR
-   : '\\' [tbnrf"'\\]
+   : '\\' ( 't' | 'b' | 'n' | 'r' | 'f' | '"' | '\'' | '\\' )
    ;
 
 /* [161s] */
