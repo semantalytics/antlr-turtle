@@ -1,6 +1,6 @@
-parser grammar turtle11Parser;
+parser grammar Turtle11Parser;
 
-options { tokenVocab=turtle11Lexer; }
+options { tokenVocab=Turtle11Lexer; }
 
 /* [1] */
 turtleDoc

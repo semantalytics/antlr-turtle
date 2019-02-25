@@ -33,13 +33,13 @@ public class TestQuery {
 
     @Parameters
     public static Collection<Object[]> data() throws IOException {
-        String fixturesRoot = Resources.getResource("sparql-10-dawg").getPath();
+        String fixturesRoot = Resources.getResource("TurtleTests").getPath();
         final Path fixturesRootPath = Paths.get(fixturesRoot);
 
         return Files.walk(fixturesRootPath)
                 .filter(Files::isRegularFile)
                 .map(path -> fixturesRootPath.relativize(path).toString())
-                .filter(f -> f.endsWith(".rq"))
+                .filter(f -> f.endsWith(".ttl"))
                 .map(f -> new Object[] {f})
                 .collect(Collectors.toList());
     }
@@ -48,12 +48,12 @@ public class TestQuery {
     public void CanParse() throws IOException {
         System.out.println("Attempting to parse " + fileName);
         System.out.println("");
-        Files.copy(Paths.get("./src/test/resources/sparql-10-dawg/" + fileName), System.out);
-        CharStream input = CharStreams.fromStream(new FileInputStream("./src/test/resources/sparql-10-dawg/" +fileName));
+        Files.copy(Paths.get("./src/test/resources/TurtleTests/" + fileName), System.out);
+        CharStream input = CharStreams.fromStream(new FileInputStream("./src/test/resources/TurtleTests/" +fileName));
         Turtle11Lexer lexer = new Turtle11Lexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         Turtle11Parser parser = new Turtle11Parser(tokens);
-        ParseTree tree = parser.query(); // begin parsing at query rule
+        ParseTree tree = parser.turtleDoc(); // begin parsing at query rule
         System.out.println(tree.toStringTree(parser)); // print LISP-style tree
         assertTrue(parser.getNumberOfSyntaxErrors() == 0);
     }

@@ -1,4 +1,4 @@
-lexer grammar turtle11Lexer;
+lexer grammar Turtle11Lexer;
 
 DOT
    : '.'
@@ -94,12 +94,12 @@ DECIMAL
 
 /* [21] */
 DOUBLE
-   : [+-]? ([0-9] + DOT [0-9]* EXPONENT | DOT [0-9] + EXPONENT | [0-9] + EXPONENT)
+   : [+-]? ([0-9] + DOT [0-9]* EXPONENT | DOT [0-9] + EXPONENT | [0-9]+ EXPONENT)
    ;
 
 /* [154s] */
 EXPONENT
-   : [eE] [+-]? [0-9] +
+   : [eE] [+-]? [0-9]+
    ;
 
 /* [22] */
@@ -135,10 +135,7 @@ ECHAR
 
 /* [161s] */
 WS
-   : ' '
-   | '\t'
-   | '\r'
-   | '\n'
+   : ( ' ' | '\t' | '\r' | '\n' ) -> channel(HIDDEN)
    ;
 
 /* [162] */
