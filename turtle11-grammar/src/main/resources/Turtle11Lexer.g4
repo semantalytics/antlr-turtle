@@ -216,3 +216,22 @@ HEX
 PN_LOCAL_ESC
    : '\\' ('_' | '~' | '.' | '-' | '!' | '$' | '&' | '\'' | '(' | ')' | '*' | '+' | ',' | ';' | '=' | '/' | '?' | '#' | '@' | '%')
    ;
+
+COMMENT
+    : '#' .*? EOL -> channel(HIDDEN)
+    ;
+
+fragment
+EOL
+    : EOL1 | EOL2
+    ;
+
+fragment
+EOL1
+    : '\n'
+    ;
+
+fragment
+EOL2
+    : '\r'
+    ;
